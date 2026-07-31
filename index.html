@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weekly Wins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #353752;
+    --bg-deep: #2a2c43;
+    --primary: #ba4f65;
+    --primary-hover: #a64356;
+    --secondary: #cab6a0;
+    --light-text: #efe6e0;
+    --accent: #faefea;
+    --muted: rgba(239, 230, 224, 0.6);
+    --card: rgba(250, 239, 234, 0.04);
+    --card-border: rgba(202, 182, 160, 0.18);
+    --input-bg: #faefea;
+    --input-text: #353752;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--light-text);
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #3f4263 0%, #353752 100%);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+  }
+  .eyebrow {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin: 0 0 8px;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: 32px;
+    margin: 0;
+    color: var(--accent);
+    letter-spacing: 0.3px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 32px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+    margin: 0 0 4px;
+    font-weight: 400;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 16px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Form rows */
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; }
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.4px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    transition: all 0.2s ease;
+  }
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(186, 79, 101, 0.15);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+  ::placeholder { color: rgba(53, 55, 82, 0.45); }
+
+  /* Wins */
+  .win-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .win-num {
+    background: var(--primary);
+    color: var(--accent);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .win-row textarea {
+    min-height: 60px;
+  }
+
+  /* Energy sliders */
+  .energy-card {
+    background: var(--accent);
+    border-radius: 10px;
+    padding: 22px 20px;
+    color: var(--bg);
+  }
+  .slider-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 32px;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0;
+  }
+  .slider-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--bg);
+  }
+  .slider-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    text-align: right;
+    color: var(--primary);
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(53, 55, 82, 0.15);
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: 2px solid var(--accent);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: 2px solid var(--accent);
+  }
+
+  /* Buttons */
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  button {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: var(--accent);
+  }
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+  }
+  .btn-secondary:hover {
+    background: var(--secondary);
+    color: var(--bg);
+  }
+  .btn-secondary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--primary);
+    color: var(--accent);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Past weeks */
+  .past-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .past-item {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .past-item:hover {
+    border-color: var(--secondary);
+    background: rgba(250, 239, 234, 0.07);
+  }
+  .past-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .past-item-date {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .past-item-theme {
+    font-size: 13px;
+    color: var(--secondary);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .past-item-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .icon-btn {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--secondary);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.15s ease;
+  }
+  .icon-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .empty-state {
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  /* Loading state */
+  .loading {
+    text-align: center;
+    color: var(--muted);
+    padding: 20px;
+    font-size: 14px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--card-border);
+    margin: 40px 0;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <p class="eyebrow">Weekly Wins</p>
+      <h1 id="headerDate">Week of —</h1>
+    </div>
+
+    <!-- Week & Theme -->
+    <div class="section">
+      <div class="row">
+        <div>
+          <label for="weekDate">Week of</label>
+          <input type="date" id="weekDate" />
+        </div>
+        <div>
+          <label for="themeWord">Theme word</label>
+          <input type="text" id="themeWord" placeholder="e.g. courage" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Three Wins -->
+    <div class="section">
+      <h2 class="section-title">Three wins</h2>
+      <p class="section-sub">One business · one personal · one invisible</p>
+
+      <div class="win-row">
+        <div class="win-num">1</div>
+        <textarea id="win1" placeholder="Business win"></textarea>
+      </div>
+      <div class="win-row">
+        <div class="win-num">2</div>
+        <textarea id="win2" placeholder="Personal win"></textarea>
+      </div>
+      <div class="win-row">
+        <div class="win-num">3</div>
+        <textarea id="win3" placeholder="Invisible win — the hard thing nobody saw"></textarea>
+      </div>
+    </div>
+
+    <!-- Evidence -->
+    <div class="section">
+      <h2 class="section-title">Evidence of progress</h2>
+      <div style="margin-bottom: 14px;">
+        <label for="number">A number you moved</label>
+        <input type="text" id="number" placeholder="e.g. 12 new email subscribers" />
+      </div>
+      <div style="margin-bottom: 14px;">
+        <label for="quote">A quote (from a client, family, or yourself)</label>
+        <input type="text" id="quote" placeholder="e.g. 'Mom, you were really focused this week.'" />
+      </div>
+      <div>
+        <label for="moment">A moment to remember</label>
+        <textarea id="moment" placeholder="e.g. The matcha walk on Tuesday when I figured out the keynote opening."></textarea>
+      </div>
+    </div>
+
+    <!-- Energy -->
+    <div class="section">
+      <h2 class="section-title">Energy check</h2>
+      <p class="section-sub">Where am I, on a scale of 1 to 10?</p>
+      <div class="energy-card">
+        <div class="slider-row">
+          <span class="slider-label">Business</span>
+          <input type="range" min="1" max="10" value="7" id="energyBusiness" />
+          <span class="slider-value" id="energyBusinessVal">7</span>
+        </div>
+        <div class="slider-row">
+          <span class="slider-label">Personal</span>
+          <input type="range" min="1" max="10" value="7" id="energyPersonal" />
+          <span class="slider-value" id="energyPersonalVal">7</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Synthesis -->
+    <div class="section">
+      <h2 class="section-title">Synthesis</h2>
+      <div style="margin-bottom: 14px;">
+        <label for="lesson">What did this week teach me?</label>
+        <textarea id="lesson" placeholder="One line."></textarea>
+      </div>
+      <div>
+        <label for="needle">Next week's one thing (the needle-mover)</label>
+        <textarea id="needle" placeholder="Not a list. The single Petite Practice."></textarea>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-row">
+      <button class="btn-primary" onclick="saveWeek()">Save this week</button>
+      <button class="btn-secondary" onclick="newWeek()">+ New week</button>
+      <button class="btn-secondary" onclick="exportAll()" id="exportBtn" disabled>Export all weeks</button>
+    </div>
+
+    <hr />
+
+    <!-- Past weeks -->
+    <div class="section">
+      <h2 class="section-title">Past weeks</h2>
+      <div id="pastList" class="past-list">
+        <div class="loading">Loading past weeks…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+<script>
+  // ----- State -----
+  let weeks = {};
+  let currentLoadedKey = null;
+
+  // ----- Helpers -----
+  const $ = id => document.getElementById(id);
+  const fields = ['weekDate','themeWord','win1','win2','win3','number','quote','moment','lesson','needle'];
+  const sliders = ['energyBusiness','energyPersonal'];
+
+  function todayISO() {
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function formatDateLong(iso) {
+    if (!iso) return '—';
+    const [y,m,d] = iso.split('-').map(Number);
+    const dt = new Date(y, m-1, d);
+    return dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._tid);
+    t._tid = setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  function getCurrentWeekData() {
+    return {
+      weekDate: $('weekDate').value,
+      themeWord: $('themeWord').value,
+      win1: $('win1').value,
+      win2: $('win2').value,
+      win3: $('win3').value,
+      number: $('number').value,
+      quote: $('quote').value,
+      moment: $('moment').value,
+      lesson: $('lesson').value,
+      needle: $('needle').value,
+      energyBusiness: $('energyBusiness').value,
+      energyPersonal: $('energyPersonal').value,
+      savedAt: new Date().toISOString()
+    };
+  }
+
+  function loadWeekData(data) {
+    fields.forEach(f => { if (data[f] !== undefined) $(f).value = data[f]; });
+    sliders.forEach(s => {
+      if (data[s] !== undefined) {
+        $(s).value = data[s];
+        $(s+'Val').textContent = data[s];
+      }
+    });
+    updateHeader();
+  }
+
+  function clearForm() {
+    $('weekDate').value = todayISO();
+    $('themeWord').value = '';
+    ['win1','win2','win3','number','quote','moment','lesson','needle'].forEach(f => $(f).value = '');
+    sliders.forEach(s => {
+      $(s).value = 7;
+      $(s+'Val').textContent = '7';
+    });
+    currentLoadedKey = null;
+    updateHeader();
+  }
+
+  function updateHeader() {
+    $('headerDate').textContent = 'Week of ' + formatDateLong($('weekDate').value);
+  }
+
+  // ----- Storage -----
+  async function loadAllWeeks() {
+    try {
+      const result = await window.storage.list('week:');
+      const keys = result?.keys || [];
+      weeks = {};
+      for (const k of keys) {
+        try {
+          const r = await window.storage.get(k);
+          if (r && r.value) {
+            const data = JSON.parse(r.value);
+            weeks[data.weekDate || k.replace('week:','')] = data;
+          }
+        } catch(e) { /* skip bad entry */ }
+      }
+    } catch (e) {
+      console.error('Failed to load weeks:', e);
+      weeks = {};
+    }
+    renderPastWeeks();
+  }
+
+  async function saveWeek() {
+    const data = getCurrentWeekData();
+    if (!data.weekDate) {
+      showToast('Pick a week date first');
+      return;
+    }
+    try {
+      const key = 'week:' + data.weekDate;
+      await window.storage.set(key, JSON.stringify(data));
+      weeks[data.weekDate] = data;
+      currentLoadedKey = data.weekDate;
+      renderPastWeeks();
+      showToast('Week saved ✨');
+    } catch (e) {
+      console.error(e);
+      showToast('Could not save — try again');
+    }
+  }
+
+  async function deleteWeek(weekDate) {
+    if (!confirm('Delete this saved week? This cannot be undone.')) return;
+    try {
+      await window.storage.delete('week:' + weekDate);
+      delete weeks[weekDate];
+      if (currentLoadedKey === weekDate) clearForm();
+      renderPastWeeks();
+      showToast('Deleted');
+    } catch (e) {
+      showToast('Could not delete');
+    }
+  }
+
+  function newWeek() {
+    clearForm();
+    showToast('Fresh week started');
+  }
+
+  function renderPastWeeks() {
+    const list = $('pastList');
+    const sortedKeys = Object.keys(weeks).sort().reverse();
+
+    $('exportBtn').disabled = sortedKeys.length === 0;
+
+    if (sortedKeys.length === 0) {
+      list.innerHTML = '<p class="empty-state">No saved weeks yet.</p>';
+      return;
+    }
+
+    list.innerHTML = sortedKeys.map(k => {
+      const w = weeks[k];
+      const theme = w.themeWord ? w.themeWord : 'No theme';
+      return `
+        <div class="past-item" onclick="openWeek('${k}')">
+          <div class="past-item-info">
+            <div class="past-item-date">${formatDateLong(w.weekDate)}</div>
+            <div class="past-item-theme">${escapeHtml(theme)}</div>
+          </div>
+          <div class="past-item-actions">
+            <button class="icon-btn" onclick="event.stopPropagation(); deleteWeek('${k}')" title="Delete">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  function openWeek(key) {
+    if (!weeks[key]) return;
+    loadWeekData(weeks[key]);
+    currentLoadedKey = key;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('Loaded ' + formatDateLong(key));
+  }
+
+  function exportAll() {
+    const sortedKeys = Object.keys(weeks).sort();
+    if (sortedKeys.length === 0) return;
+
+    let md = '# Weekly Wins — Export\n\n';
+    md += `_Exported ${formatDateLong(todayISO())}_\n\n---\n\n`;
+
+    sortedKeys.forEach(k => {
+      const w = weeks[k];
+      md += `## Week of ${formatDateLong(w.weekDate)}\n`;
+      if (w.themeWord) md += `**Theme:** ${w.themeWord}\n\n`;
+      md += `### Three Wins\n`;
+      md += `1. **Business:** ${w.win1 || '—'}\n`;
+      md += `2. **Personal:** ${w.win2 || '—'}\n`;
+      md += `3. **Invisible:** ${w.win3 || '—'}\n\n`;
+      md += `### Evidence of Progress\n`;
+      md += `- **Number moved:** ${w.number || '—'}\n`;
+      md += `- **Quote:** ${w.quote || '—'}\n`;
+      md += `- **Moment to remember:** ${w.moment || '—'}\n\n`;
+      md += `### Energy Check\n`;
+      md += `- Business: ${w.energyBusiness}/10\n`;
+      md += `- Personal: ${w.energyPersonal}/10\n\n`;
+      md += `### Synthesis\n`;
+      md += `- **Lesson:** ${w.lesson || '—'}\n`;
+      md += `- **Next week's one thing:** ${w.needle || '—'}\n\n`;
+      md += `---\n\n`;
+    });
+
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `weekly-wins-${todayISO()}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Exported to file');
+  }
+
+  // ----- Wire up -----
+  sliders.forEach(s => {
+    $(s).addEventListener('input', e => {
+      $(s+'Val').textContent = e.target.value;
+    });
+  });
+
+  $('weekDate').addEventListener('change', updateHeader);
+
+  // Init
+  $('weekDate').value = todayISO();
+  updateHeader();
+  loadAllWeeks();
+</script>
+</body>
+</html>
